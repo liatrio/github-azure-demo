@@ -1,12 +1,12 @@
 name: verify/dotnet
 
 on:
-  - pull_request:
-      branches:
-        - "*"
-  - push:
-      branches:
-        - master
+  pull_request:
+    branches:
+      - "*"
+  push:
+    branches:
+      - master
 
 env:
   DOTNET_VERSION: '3.1.201'
@@ -15,11 +15,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+      - uses: actions/checkout@v1
 
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - run: dotnet run -p build/build.csproj -- test
+      - run: dotnet run -p build/build.csproj -- test
