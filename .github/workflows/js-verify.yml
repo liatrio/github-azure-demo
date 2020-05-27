@@ -25,7 +25,7 @@ jobs:
       - run: |
           yarn
           yarn coverage
-          ./node_modules/.bin/codecov --token="${{ secrets.CODECOV_TOKEN }}"
+          bash <(curl -s https://codecov.io/bash)
   lint:
     runs-on: ubuntu-latest
     steps:

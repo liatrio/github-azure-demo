@@ -6,7 +6,6 @@
     "@testing-library/jest-dom": "^5.8.0",
     "@testing-library/react": "^10.0.4",
     "chance": "^1.1.5",
-    "codecov": "^3.7.0",
     "cross-env": "^5.1.4",
     "prettier": "^2.0.5"
   },
