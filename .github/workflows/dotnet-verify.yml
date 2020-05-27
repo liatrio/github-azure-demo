@@ -2,6 +2,9 @@ name: verify/dotnet
 
 on:
   - pull_request
+  - push:
+      branches:
+        - master
 
 env:
   DOTNET_VERSION: '3.1.201'
