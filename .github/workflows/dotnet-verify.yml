@@ -1,7 +1,9 @@
 name: verify/dotnet
 
 on:
-  - pull_request
+  - pull_request:
+      branches:
+        - "*"
   - push:
       branches:
         - master
