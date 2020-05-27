@@ -1,0 +1,30 @@
+codecov:
+  require_ci_to_pass: true
+
+coverage:
+  precision: 2
+  round: down
+  range: "25...100"
+  status:
+    project:
+      target: auto
+      threshhold: 0%
+      base: auto
+      paths:
+        - "src/client"
+        - "src/Conduit"
+
+parsers:
+  gcov:
+    branch_detection:
+      conditional: yes
+      loop: yes
+      method: no
+      macro: no
+
+comment:
+  layout: "reach,diff,flags,tree"
+  behavior: default
+  require_changes: false
+  branches:
+    - master
