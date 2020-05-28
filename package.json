@@ -62,8 +62,8 @@
     "build": "node scripts/build.js",
     "coverage": "cross-env NODE_ENV=test jest --coverage",
     "dev": "cross-env PORT=4100 node scripts/start.js",
-    "lint": "prettier --check src/client/**/*.{spec.js,js}",
-    "lintfix": "prettier --write src/client/**/*.{spec.js,js}",
+    "lint": "prettier --check \"src/client/**/*.{spec.js,js}\"",
+    "lintfix": "prettier --write \"src/client/**/*.{spec.js,js}\"",
     "test": "cross-env NODE_ENV=test jest"
   },
   "jest": {
