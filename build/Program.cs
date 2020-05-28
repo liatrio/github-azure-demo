@@ -50,7 +50,7 @@ public static class Program
 
                 foreach (var file in GetFiles("tests/**/*.csproj"))
                 {
-                    Run("dotnet", $"test {file} -c Release --no-restore --no-build --verbosity=normal");
+                    Run("dotnet", $"test {file} -c Release --collect:\"XPlat Code Coverage\" --no-restore --no-build --verbosity=normal");
                 }
             });
 
