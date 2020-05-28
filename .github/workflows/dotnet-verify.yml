@@ -22,4 +22,6 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - run: dotnet run -p build/build.csproj -- test
+      - run: |
+          dotnet run -p build/build.csproj -- test
+          bash <(curl -s https://codecov.io/bash)
