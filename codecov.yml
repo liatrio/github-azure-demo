@@ -7,12 +7,17 @@ coverage:
   range: "25...100"
   status:
     project:
-      default:
+      js:
         target: auto
         threshold: 0%
         base: auto
         paths:
           - "src/client"
+      dotnet:
+        target: auto
+        threshold: 0%
+        base: auto
+        paths:
           - "src/Conduit"
 
 parsers:
