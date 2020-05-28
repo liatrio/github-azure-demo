@@ -7,12 +7,13 @@ coverage:
   range: "25...100"
   status:
     project:
-      target: auto
-      threshhold: 0%
-      base: auto
-      paths:
-        - "src/client"
-        - "src/Conduit"
+      default:
+        target: auto
+        threshold: 0%
+        base: auto
+        paths:
+          - "src/client"
+          - "src/Conduit"
 
 parsers:
   gcov:
