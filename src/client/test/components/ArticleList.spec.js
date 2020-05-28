@@ -15,13 +15,13 @@ const createRandomArticle = (favorited = chance.bool()) => ({
     favorited,
     author: {
         username: chance.word(),
-        image: chance.url()
+        image: chance.url(),
     },
     createdAt: chance.date(),
     favoritesCount: chance.d6(),
     title: chance.sentence(),
     description: chance.paragraph(),
-    tagList: chance.n(chance.word, chance.d6())
+    tagList: chance.n(chance.word, chance.d6()),
 });
 
 describe("article list", () => {
@@ -31,12 +31,12 @@ describe("article list", () => {
         randomArticles = chance.shuffle([
             createRandomArticle(true),
             createRandomArticle(false),
-            ...chance.n(createRandomArticle, chance.d4())
+            ...chance.n(createRandomArticle, chance.d4()),
         ]);
     });
 
     test("renders a loading div when no articles are loaded", () => {
-        const { queryAllByText } = render(<ArticleList/>);
+        const { queryAllByText } = render(<ArticleList />);
         const query = queryAllByText("Loading...");
 
         expect(query).toHaveLength(1);
@@ -46,7 +46,7 @@ describe("article list", () => {
         const { queryAllByText } = render(
             <Provider store={store}>
                 <ConnectedRouter history={history}>
-                    <ArticleList articles={randomArticles}/>
+                    <ArticleList articles={randomArticles} />
                 </ConnectedRouter>
             </Provider>
         );
@@ -56,4 +56,3 @@ describe("article list", () => {
         });
     });
 });
-
