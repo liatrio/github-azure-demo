@@ -66,7 +66,7 @@ test("deleting a comment", () => {
     const deletedComment =
         initialComments[
             chance.natural({ min: 0, max: initialComments.length - 1 })
-            ];
+        ];
 
     const newState = articleReducer(initialState, {
         type: DELETE_COMMENT,
