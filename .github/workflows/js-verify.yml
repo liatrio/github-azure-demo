@@ -61,7 +61,8 @@ jobs:
         uses: peter-evans/create-pull-request@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "automated prettier lint fix for #${{ steps.pr-vars.outputs.result }}"
+          commit-message: "Automated prettier lint fix for #${{ steps.pr-vars.outputs.result }}"
+          title: "Automated prettier lint fix for #${{ steps.pr-vars.outputs.result }}"
           branch: lint-fix
           branch-suffix: short-commit-hash
           body: |
