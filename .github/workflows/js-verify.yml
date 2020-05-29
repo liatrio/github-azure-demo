@@ -29,7 +29,9 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2 # create-pull-request requires v2
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Setup Node
         uses: actions/setup-node@v1
@@ -39,3 +41,28 @@ jobs:
       - run: |
           yarn
           yarn lint
+
+      - name: Fix Lint Errors
+        if: failure()
+        run: |
+          yarn lintfix
+
+      - name: Get required PR variables
+        if: failure()
+        id: pr-vars
+        uses: actions/github-script@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            return context.payload.number;
+
+      - name: Create PR With Lint Fixes
+        if: failure()
+        uses: peter-evans/create-pull-request@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "automated prettier lint fix for #${{ steps.pr-vars.outputs.result }}"
+          branch: lint-fix
+          branch-suffix: short-commit-hash
+          body: |
+            This pull request was created automatically to fix the Prettier lint failures in #${{ steps.pr-vars.outputs.result }}
