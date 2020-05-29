@@ -39,3 +39,16 @@ jobs:
       - run: |
           yarn
           yarn lint
+
+      - name: Fix Lint Errors
+        if: failure()
+        run: |
+          git checkout "${GITHUB_REF:11}"
+          yarn lintfix
+
+      - name: Create PR With Lint Fixes
+        if: failure()
+        uses: peter-evans/create-pull-request@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.head_ref }}
