@@ -1,56 +1,36 @@
-# ![RealWorld Example App](logo.png)
+# GitHub Actions + Azure App Service demo
 
-ASP.NET Core codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld-example-apps) spec and API.
+This project demonstrates using GitHub Actions to test, build and deploy an application to Azure App Service.
 
-## [RealWorld](https://github.com/gothinkster/realworld)
+It uses the [Realworld example application](https://github.com/gothinkster/realworld) to demonstrate the pipeline and services. The application is built using the [Realworld ASP.NET Core backend](https://github.com/gothinkster/aspnetcore-realworld-example-app) combined with the [Realworld React frontend](https://github.com/gothinkster/react-redux-realworld-example-app).
 
-This codebase was created to demonstrate a fully fledged fullstack application built with ASP.NET Core (with Feature orientation) including CRUD operations, authentication, routing, pagination, and more.
+## Featured Technologies
+ - [GitHub Actions](https://github.com/features/actions)
+ - [GitHub Deployments](https://developer.github.com/v3/repos/deployments/)
+ - [GitHub Dependabot](https://github.com/features/security)
+ - [Azure App Service](https://azure.microsoft.com/en-us/services/app-service/)
+ - [CodeCov](https://codecov.io/)
+ - [Terraform](https://www.terraform.io/)
 
-We've gone to great lengths to adhere to the ASP.NET Core community styleguides & best practices.
+## Realworld Application Setup	
 
-For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
+Install the .NET Core SDK and lots of documentation: [https://www.microsoft.com/net/download/core](https://www.microsoft.com/net/download/core)	
 
-## How it works
+Documentation for ASP.NET Core: [https://docs.microsoft.com/en-us/aspnet/core/](https://docs.microsoft.com/en-us/aspnet/core/)	
 
-This is using ASP.NET Core with:
+## Realworld Application Docker Build	
 
-- CQRS and [MediatR](https://github.com/jbogard/MediatR)
-  - [Simplifying Development and Separating Concerns with MediatR](https://blogs.msdn.microsoft.com/cdndevs/2016/01/26/simplifying-development-and-separating-concerns-with-mediatr/)
-  - [CQRS with MediatR and AutoMapper](https://lostechies.com/jimmybogard/2015/05/05/cqrs-with-mediatr-and-automapper/)
-  - [Thin Controllers with CQRS and MediatR](https://codeopinion.com/thin-controllers-cqrs-mediatr/)
-- [AutoMapper](http://automapper.org)
-- [Fluent Validation](https://github.com/JeremySkinner/FluentValidation)
-- Feature folders and vertical slices
-- [Entity Framework Core](https://docs.microsoft.com/en-us/ef/) on SQLite for demo purposes. Can easily be anything else EF Core supports. Open to porting to other ORMs/DBs.
-- Built-in Swagger via [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)
-- [Bullseye](https://github.com/adamralph/bullseye) for building!
-- JWT authentication using [ASP.NET Core JWT Bearer Authentication](https://github.com/aspnet/Security/tree/master/src/Microsoft.AspNetCore.Authentication.JwtBearer).
+There is a 'Makefile' for OS X and Linux:	
 
-This basic architecture is based on this reference architecture: [https://github.com/jbogard/ContosoUniversityCore](https://github.com/jbogard/ContosoUniversityCore)
+- `make build` executes `docker-compose build`	
+- `make run` executes `docker-compose run`	
 
-## Getting started
+The above might work for Docker on Windows	
 
-Install the .NET Core SDK and lots of documentation: [https://www.microsoft.com/net/download/core](https://www.microsoft.com/net/download/core)
+## Realworld Application Local building	
 
-Documentation for ASP.NET Core: [https://docs.microsoft.com/en-us/aspnet/core/](https://docs.microsoft.com/en-us/aspnet/core/)
+- It's just another C# file!   `dotnet run -p build/build.csproj`	
 
-## Docker Build
-
-There is a 'Makefile' for OS X and Linux:
-
-- `make build` executes `docker-compose build`
-- `make run` executes `docker-compose run`
-
-The above might work for Docker on Windows
-
-## Local building
-
-- It's just another C# file!   `dotnet run -p build/build.csproj`
-
-## Swagger URL
+## Realworld Application Swagger URL	
 
 - `http://localhost:5000/swagger`
-
-## GitHub Actions build
-
-![Build and Test](https://github.com/gothinkster/aspnetcore-realworld-example-app/workflows/Build%20and%20Test/badge.svg)
