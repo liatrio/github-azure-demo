@@ -29,7 +29,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2 # create-pull-request requires v2
 
       - name: Setup Node
         uses: actions/setup-node@v1
@@ -43,7 +43,6 @@ jobs:
       - name: Fix Lint Errors
         if: failure()
         run: |
-          git checkout "${GITHUB_REF:11}"
           yarn lintfix
 
       - name: Create PR With Lint Fixes
