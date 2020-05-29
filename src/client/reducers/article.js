@@ -3,7 +3,7 @@ import {
     ARTICLE_PAGE_UNLOADED,
     ADD_COMMENT,
     DELETE_COMMENT,
-} from '../constants/actionTypes';
+} from "../constants/actionTypes";
 
 export default (state = {}, action) => {
     switch (action.type) {
@@ -14,7 +14,7 @@ export default (state = {}, action) => {
                 comments: action.payload[1].comments,
             };
         case ARTICLE_PAGE_UNLOADED:
-            return {}
+            return {};
         case ADD_COMMENT:
             return {
                 ...state,
