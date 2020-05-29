@@ -47,8 +47,23 @@ jobs:
         run: |
           yarn lintfix
 
+      - name: Get required PR variables
+        if: failure()
+        id: pr-vars
+        uses: actions/github-script@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const core = require('@actions/core')
+            return context.payload.number;
+
       - name: Create PR With Lint Fixes
         if: failure()
         uses: peter-evans/create-pull-request@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "automated prettier lint fix for #${{ steps.pr-vars.outputs.result }}"
+          branch: lint-fix
+          branch-suffix: short-commit-hash
+          body: |
+            This pull request was created automatically to fix the Prettier lint failures in #${{ steps.pr-vars.outputs.result }}
