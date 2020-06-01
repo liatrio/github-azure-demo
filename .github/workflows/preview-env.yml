@@ -19,7 +19,9 @@ jobs:
         run: echo "##[set-output name=name;]$(git show-ref | grep ${{ steps.commit.outputs.id }} | awk '{print $2;}' | awk -F '/' '{print $4}')"
         id: branch
       - name: test
-        run: echo '${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}'
+        run: echo $TEST
+        env:
+          TEST: '${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}'
       - name: Terraform Plan
         uses: jacekhewko/terragrunt-github-actions@master
         with:
