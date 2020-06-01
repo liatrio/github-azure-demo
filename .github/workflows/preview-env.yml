@@ -24,10 +24,10 @@ jobs:
           terragrunt_version: 0.23.2
       - uses: azure/login@v1.1
         with:
-          creds: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Terragrunt
         run: terragrunt plan-all
         env:	
-          ARM_ACCESS_KEY: '${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}'	
+          ARM_ACCESS_KEY: '${{ secrets.AZURE_CREDENTIALS }}'	
           ENVIRONMENT: 'preview'	
           BRANCH: '${{ steps.branch.outputs.name }}' 
