@@ -18,8 +18,8 @@ jobs:
       - name: Match Branch
         run: echo "##[set-output name=name;]$(git show-ref | grep ${{ steps.commit.outputs.id }} | awk '{print $2;}' | awk -F '/' '{print $4}')"
         id: branch
-      - name: CWD
-        run: pwd; ls
+      - name: test
+        run: echo '${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}'
       - name: Terraform Plan
         uses: jacekhewko/terragrunt-github-actions@master
         with:
