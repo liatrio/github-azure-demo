@@ -21,9 +21,8 @@ jobs:
       - name: Setup Terragrunt
         uses: autero1/action-terragrunt@v0.1.0
         with:
-          terragrunt_version: 0.21.13
-      - name: Interact with Terragrunt
-        run: terragrunt --version
+          terragrunt_version: 0.23.2
+      - name: Terragrunt
         run: ARM_ACCESS_KEY = "${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}" ENVIRONMENT = "preview" BRANCH = "${{ steps.branch.outputs.name }}" terragrunt plan-all
 
 
