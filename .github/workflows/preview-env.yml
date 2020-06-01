@@ -3,7 +3,7 @@ name: preview-env
 on:
   pull_request:
     branches:
-      -master
+      - master
     types: [opened, synchronize]
 
 jobs:
