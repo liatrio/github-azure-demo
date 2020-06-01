@@ -12,14 +12,24 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v1
+      - name: Branch ID
+        run: echo "##[set-output name=id;]$(git --no-pager log --first-parent --pretty=oneline | head -1 |  awk '{print $3;}')"
+        id: commit
+      - name: Match Branch
+        run: git show-ref | grep ${{ steps.commit.outputs.id }} | awk '{print $2;}' | awk -F "/" '{print $4}'
+        id: branch
       - name: Terraform Apply
         uses: hashicorp/terraform-github-actions@master
         with:
           tf_actions_version: 0.12.14
           use_terragrunt: true
           tg_actions_version: 0.23.2
-          tf_actions_subcommand: 'apply'
+          tf_actions_subcommand: 'plan-all'
           tf_actions_working_dir: './terraform/'
           tf_actions_comment: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARM_ACCESS_KEY: ${{ AZURE_WEBAPP_PUBLISH_PROFILE }}
+          ENVIRONMENT: preview
+          BRANCH: ${{ steps.branch.outputs }}
+
