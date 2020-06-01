@@ -18,10 +18,6 @@ jobs:
       - name: Match Branch
         run: echo "##[set-output name=name;]$(git show-ref | grep ${{ steps.commit.outputs.id }} | awk '{print $2;}' | awk -F '/' '{print $4}')"
         id: branch
-      - name: test
-        run: echo $TEST
-        env:
-          TEST: '${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}'
       - name: Terraform Plan
         uses: jacekhewko/terragrunt-github-actions@master
         with:
@@ -32,7 +28,7 @@ jobs:
           tf_actions_working_dir: 'terraform/'
           tf_actions_comment: true
         env:
-          ARM_ACCESS_KEY: '${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}'
+          ARM_ACCESS_KEY: '${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}'
           ENVIRONMENT: 'preview'
           BRANCH: '${{ steps.branch.outputs.name }}'
 
