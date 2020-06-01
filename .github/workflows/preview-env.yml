@@ -18,17 +18,12 @@ jobs:
       - name: Match Branch
         run: echo "##[set-output name=name;]$(git show-ref | grep ${{ steps.commit.outputs.id }} | awk '{print $2;}' | awk -F '/' '{print $4}')"
         id: branch
-      - name: Terraform Plan
-        uses: jacekhewko/terragrunt-github-actions@master
+      - name: Setup Terragrunt
+        uses: autero1/action-terragrunt@v0.1.0
         with:
-          tf_actions_version: 0.12.14
-          use_terragrunt: true
-          tg_actions_version: 0.23.2
-          tf_actions_subcommand: 'plan'
-          tf_actions_working_dir: 'terraform/'
-          tf_actions_comment: true
-        env:
-          ARM_ACCESS_KEY: '${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}'
-          ENVIRONMENT: 'preview'
-          BRANCH: '${{ steps.branch.outputs.name }}'
+          terragrunt_version: 0.21.13
+      - name: Interact with Terragrunt
+        run: terragrunt --version
+        run: ARM_ACCESS_KEY = "${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}" ENVIRONMENT = "preview" BRANCH = "${{ steps.branch.outputs.name }}" terragrunt plan-all
+
 
