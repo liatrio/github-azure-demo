@@ -28,6 +28,6 @@ jobs:
       - name: Terragrunt
         run: terragrunt plan-all
         env:	
-          ARM_ACCESS_KEY: '${{ secrets.AZURE_CREDENTIALS }}'	
+          ARM_ACCESS_KEY: '${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}'	
           ENVIRONMENT: 'preview'	
           BRANCH: '${{ steps.branch.outputs.name }}' 
