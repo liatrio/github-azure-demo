@@ -16,7 +16,7 @@ jobs:
         run: echo "##[set-output name=id;]$(git --no-pager log --first-parent --pretty=oneline | head -1 |  awk '{print $3;}')"
         id: commit
       - name: Match Branch
-        run: git show-ref | grep ${{ steps.commit.outputs.id }} | awk '{print $2;}' | awk -F "/" '{print $4}'
+        run: echo "##[set-output name=name;]$(git show-ref | grep ${{ steps.commit.outputs.id }} | awk '{print $2;}' | awk -F '/' '{print $4}')"
         id: branch
       - name: Terraform Apply
         uses: hashicorp/terraform-github-actions@master
@@ -30,5 +30,5 @@ jobs:
         env:
           ARM_ACCESS_KEY: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           ENVIRONMENT: preview
-          BRANCH: ${{ steps.branch.outputs }}
+          BRANCH: ${{ steps.branch.outputs.name }}
 
