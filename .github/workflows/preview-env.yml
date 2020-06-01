@@ -28,8 +28,7 @@ jobs:
           tf_actions_working_dir: './terraform/'
           tf_actions_comment: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ARM_ACCESS_KEY: ${{ AZURE_WEBAPP_PUBLISH_PROFILE }}
+          ARM_ACCESS_KEY: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           ENVIRONMENT: preview
           BRANCH: ${{ steps.branch.outputs }}
 
