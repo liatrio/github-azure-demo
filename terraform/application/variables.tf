@@ -21,3 +21,5 @@ variable "service_plan_size" {
 variable "service_app_scm_type" {
   default = "LocalGit"
 }
+
+variable "client_secret" {}
