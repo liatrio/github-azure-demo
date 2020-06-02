@@ -90,7 +90,6 @@ jobs:
           environment_url: "https://${{ steps.output.outputs.hostname }}"
           state: "success"
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-  
       - name: Update deployment status (failure)
         if: failure()
         uses: chrnorm/deployment-status@releases/v1
@@ -100,5 +99,9 @@ jobs:
           environment_url: "https://${{ steps.output.outputs.hostname }}"
           state: "failure"
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-
-
+      - name: PR Comment
+        uses: unsplash/comment-on-pr@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          msg: "Your preview environment has been created! You can find the link for your environment below."

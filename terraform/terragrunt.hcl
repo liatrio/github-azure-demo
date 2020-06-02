@@ -16,7 +16,7 @@ remote_state {
   }
 }
 
-skip = false
+skip = true
 
 terraform {
   extra_arguments "common_vars" {
