@@ -33,8 +33,8 @@ jobs:
       - name: terragrunt output
         run: | 
           cd terraform/application
-          terragrunt output -json 2&>/dev/null | jq -r '.azure_app_hostname.value'
-          echo "##[set-output name=hostname;]$(terragrunt output -json 2&>/dev/null | jq -r '.azure_app_hostname.value')"
+          terragrunt output -json | jq -r '.azure_app_hostname.value'
+          echo "##[set-output name=hostname;]$(terragrunt output -json | jq -r '.azure_app_hostname.value')"
         id: output
         env:
           ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
