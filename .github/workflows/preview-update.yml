@@ -73,10 +73,9 @@ jobs:
       - name: dotnet build and publish
         run: |
           dotnet run -p build/build.csproj
-      - name: 'Login via Azure CLI'
-        uses: azure/login@v1
+      - uses: azure/login@v1.1
         with:
-          credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: 'Run Azure webapp deploy action'
         uses: azure/webapps-deploy@v2
         with:
