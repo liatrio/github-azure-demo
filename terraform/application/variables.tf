@@ -21,3 +21,15 @@ variable "service_plan_size" {
 variable "service_app_scm_type" {
   default = "LocalGit"
 }
+
+variable "sql_edition" {
+  default = "GeneralPurpose"
+}
+
+variable "sql_requested_service_objective_name" {
+  default = "GP_S_Gen5_1"
+}
+
+variable "sql_max_size_bytes" {
+  default = 2 * 1024 * 1024 * 1024 # 2G
+}
