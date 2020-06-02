@@ -37,6 +37,8 @@ jobs:
         id: output
         env:
           ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
+          ENVIRONMENT: preview
+          BRANCH: ${{ steps.branch.outputs.name }}
       - name: comment PR
         uses: unsplash/comment-on-pr@master
         env:
