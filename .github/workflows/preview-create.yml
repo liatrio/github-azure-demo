@@ -35,4 +35,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          msg: "test message"
+          msg: "Your preview environment has been created"
