@@ -32,3 +32,13 @@ terraform show -json | jq '.values.root_module.resources[] | select( .type == "a
 ```
 
 See the [Application Terraform](../terraform/README.md) for an example using the access key.
+
+## Import exiting resources
+
+```
+terraform import azurerm_resource_group.github_workshop `az group show --name github-workshop | jq -r .id`
+terraform import azurerm_resource_group.github_workshop_preview `az group show --name github-workshop-preview | jq -r .id`
+terraform import azurerm_resource_group.github_workshop_prod `az group show --name github-workshop-prod | jq -r .id`
+terraform import azurerm_storage_account.storage_account `az storage account show --name githubworkshop | jq -r .id`
+terraform import azurerm_storage_container.storage_container https://githubworkshop.blob.core.windows.net/tfstate
+```
