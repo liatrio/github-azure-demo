@@ -33,17 +33,19 @@ jobs:
       - name: terragrunt output
         run: | 
           cd terraform/application
-          terragrunt output -json | jq -r '.azure_app_hostname.value'
           echo "##[set-output name=hostname;]$(terragrunt output -json | jq -r '.azure_app_hostname.value')"
         id: output
         env:
           ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
           ENVIRONMENT: preview
           BRANCH: ${{ steps.branch.outputs.name }}
-      - name: comment PR
-        uses: unsplash/comment-on-pr@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: GitHub Deployment
+        uses: chrnorm/deployment-action@releases/v1
+        id: deployment
         with:
-          msg: "${{ steps.output.outputs.hostname }}"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target_url: ${{ steps.output.outputs.hostname }}
+          environment: ${{ steps.branch.outputs.name }}
+          ref: ${{ github.head_ref }}
+
 
