@@ -44,7 +44,7 @@ jobs:
         id: deployment
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          target_url: ${{ steps.output.outputs.hostname }}
+          target_url: "https://${{ steps.output.outputs.hostname }}"
           environment: ${{ steps.branch.outputs.name }}
           ref: ${{ github.head_ref }}
 
