@@ -4,12 +4,24 @@ on:
   pull_request:
     types: [synchronize]
 
+env:
+  DOTNET_VERSION: '3.1.201'
+  NODE_VERSION: '12.16.3'
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
         uses: actions/checkout@v1
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
       - name: Branch ID
         run: echo "##[set-output name=id;]$(git --no-pager log --first-parent --pretty=oneline | head -1 |  awk '{print $3;}')"
         id: commit
@@ -47,5 +59,40 @@ jobs:
           target_url: "https://${{ steps.output.outputs.hostname }}"
           environment: ${{ steps.branch.outputs.name }}
           ref: ${{ github.head_ref }}
+      - name: yarn build
+        run: |
+          yarn
+          yarn build
+          mkdir -p ./src/Conduit/Pages/Shared
+          mkdir -p ./src/Conduit/wwwroot
+          cp ./dist/Index.cshtml ./src/Conduit/Pages/Shared/Index.cshtml
+          cp -r ./dist/static ./src/Conduit/wwwroot
+      - name: dotnet build and publish
+        run: |
+          dotnet run -p build/build.csproj
+      - name: 'Run Azure webapp deploy action using publish profile credentials'
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/publish'
+
+      - name: Update deployment status (success)
+        if: success()
+        uses: chrnorm/deployment-status@releases/v1
+        with:
+          token: "${{ github.token }}"
+          target_url: "https://${{ secrets.AZURE_WEBAPP_NAME }}.azurewebsites.net"
+          state: "success"
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+  
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: chrnorm/deployment-status@releases/v1
+        with:
+          token: "${{ github.token }}"
+          target_url: "https://${{ secrets.AZURE_WEBAPP_NAME }}.azurewebsites.net"
+          state: "failure"
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 
 
