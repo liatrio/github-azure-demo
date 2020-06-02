@@ -21,7 +21,7 @@ jobs:
         with:
           terragrunt_version: 0.23.2
       - name: Terragrunt apply
-        run: terragrunt apply-all -auto-approve
+        run: yes | terragrunt apply-all
         env:
           ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
           ENVIRONMENT: preview
