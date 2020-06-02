@@ -11,5 +11,5 @@ output "backend_app_service_ip_addresses" {
 }
 
 output "azure_app_hostname" {
-  value = azurerm_app_service.default_site_hostname
+  value = azurerm_app_service.app_service.default_site_hostname
 }
