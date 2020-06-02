@@ -1,10 +1,8 @@
-name: preview-env
+name: preview-destroy
 
 on:
   pull_request:
-    branches:
-      - master
-    types: [opened, synchronize]
+    types: [closed]
 
 jobs:
   build:
@@ -22,7 +20,7 @@ jobs:
         uses: autero1/action-terragrunt@v0.1.0
         with:
           terragrunt_version: 0.23.2
-      - name: Terragrunt
+      - name: Terragrunt Plan
         run: terragrunt plan-all
         env:	
           ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}

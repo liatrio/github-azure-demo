@@ -1,0 +1,33 @@
+name: preview-update
+
+on:
+  pull_request:
+    types: [synchronize]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v1
+      - name: Branch ID
+        run: echo "##[set-output name=id;]$(git --no-pager log --first-parent --pretty=oneline | head -1 |  awk '{print $3;}')"
+        id: commit
+      - name: Match Branch
+        run: echo "##[set-output name=name;]$(git show-ref | grep ${{ steps.commit.outputs.id }} | awk '{print $2;}' | awk -F '/' '{print $4}')"
+        id: branch
+      - name: Setup Terragrunt
+        uses: autero1/action-terragrunt@v0.1.0
+        with:
+          terragrunt_version: 0.23.2
+      - name: Terragrunt Plan
+        run: terragrunt plan-all
+        env:	
+          ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
+          ENVIRONMENT: preview
+          BRANCH: ${{ steps.branch.outputs.name }}
+          TF_VAR_ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          TF_VAR_ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          TF_VAR_ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          TF_VAR_ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+
