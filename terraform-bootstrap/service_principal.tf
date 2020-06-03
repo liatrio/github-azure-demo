@@ -1,12 +1,27 @@
 data "azurerm_subscription" "primary" {
 }
 
-resource "azuread_service_principal" "github_action" {
-    # TODO
+resource "azuread_service_principal" "github_action_service_principal" {
+  application_id = azuread_application.github_action_demo.application_id
+}
+
+resource "azuread_service_principal_password" "github_action_service_principal_password" {
+  service_principal_id = azuread_service_principal.github_action_service_principal.id
+  value                = random_password.azuread_sp_password.result
+  end_date_relative    = "240h"
+}
+
+resource "random_password" "azuread_sp_password" {
+  length  = 10
+  special = false
+}
+
+resource "azuread_application" "github_action_demo" {
+  name = "github-action-demo"
 }
 
 resource "azurerm_role_definition" "github_action_terraform_role" {
-  name        = "GithubActionTerraformRole"
+  name        = "github-action-terraform-role"
   scope       = data.azurerm_subscription.primary.id
   description = "Role needed for github actions to have access to creating resources"
 
@@ -22,7 +37,7 @@ resource "azurerm_role_definition" "github_action_terraform_role" {
         "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/write",
         "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/delete",
         "Microsoft.SqlVirtualMachine/register/action",
-        "Microsoft.SqlVirtualMachine/unregister/action"
+        "Microsoft.SqlVirtualMachine/unregister/action",
         "Microsoft.Sql/servers/firewallRules/read",
         "Microsoft.Sql/servers/firewallRules/write",
         "Microsoft.Sql/servers/firewallRules/delete",
@@ -40,7 +55,5 @@ resource "azurerm_role_definition" "github_action_terraform_role" {
 resource "azurerm_role_assignment" "github_action_terraform_role_assignment" {
   scope              = data.azurerm_subscription.primary.id
   role_definition_id = azurerm_role_definition.github_action_terraform_role.id
-  principal_id       = data.azurerm_client_config.github_action.object_id
-  depends_on         = [azurerm_client_config.github_action]
+  principal_id       = azuread_service_principal.github_action_service_principal.object_id
 }
-
