@@ -1,0 +1,107 @@
+name: preview-create
+
+on:
+  pull_request:
+    types: [opened]
+
+env:
+  AZURE_WEBAPP_PACKAGE_PATH: '.'
+  DOTNET_VERSION: '3.1.201'
+  NODE_VERSION: '12.16.3'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v1
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Branch ID
+        run: echo "##[set-output name=id;]$(git --no-pager log --first-parent --pretty=oneline | head -1 |  awk '{print $3;}')"
+        id: commit
+      - name: Match Branch
+        run: echo "##[set-output name=name;]$(git show-ref | grep ${{ steps.commit.outputs.id }} | awk '{print $2;}' | awk -F '/' '{print $4}')"
+        id: branch
+      - name: Setup Terragrunt
+        uses: autero1/action-terragrunt@v0.1.0
+        with:
+          terragrunt_version: 0.23.2
+      - name: Terragrunt apply
+        run: yes | terragrunt apply-all
+        env:
+          ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
+          ENVIRONMENT: preview
+          BRANCH: ${{ steps.branch.outputs.name }}
+          TF_VAR_ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          TF_VAR_ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          TF_VAR_ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          TF_VAR_ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+      - name: terragrunt output
+        run: |
+          cd terraform/application
+          terragrunt output -json > terraform.output
+          echo "##[set-output name=hostname;]$(cat terraform.output | jq -r '.azure_app_hostname.value')"
+          echo "##[set-output name=app_name;]$(cat terraform.output | jq -r '.azure_app_name.value')"
+        id: output
+        env:
+          ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
+          ENVIRONMENT: preview
+          BRANCH: ${{ steps.branch.outputs.name }}
+      - name: GitHub Deployment
+        uses: chrnorm/deployment-action@releases/v1
+        id: deployment
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target_url: "https://${{ steps.output.outputs.hostname }}"
+          environment: ${{ steps.branch.outputs.name }}
+          ref: ${{ github.head_ref }}
+      - name: yarn build
+        run: |
+          yarn
+          yarn build
+          mkdir -p ./src/Conduit/Pages/Shared
+          mkdir -p ./src/Conduit/wwwroot
+          cp ./dist/Index.cshtml ./src/Conduit/Pages/Shared/Index.cshtml
+          cp -r ./dist/static ./src/Conduit/wwwroot
+      - name: dotnet build and publish
+        run: |
+          dotnet run -p build/build.csproj
+      - uses: azure/login@v1.1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: 'Run Azure webapp deploy action'
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ steps.output.outputs.app_name }}
+          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/publish'
+      - name: Update deployment status (success)
+        if: success()
+        uses: chrnorm/deployment-status@releases/v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target_url: "https://${{ steps.output.outputs.hostname }}"
+          environment_url: "https://${{ steps.output.outputs.hostname }}"
+          state: "success"
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: chrnorm/deployment-status@releases/v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          target_url: "https://${{ steps.output.outputs.hostname }}"
+          environment_url: "https://${{ steps.output.outputs.hostname }}"
+          state: "failure"
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+      - name: PR Comment
+        uses: unsplash/comment-on-pr@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          msg: "Your preview environment has been updated! Use the same link to view your changes."
