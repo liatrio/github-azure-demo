@@ -1,15 +1,15 @@
-output "ARM_CLIENT_ID" {
+output "clientId" {
   value = azuread_service_principal.github_action_service_principal.application_id
 }
 
-output "ARM_CLIENT_SECRET" {
+output "clientSecret" {
   value = random_password.azuread_sp_password.result
 }
 
-output "ARM_SUBSCRIPTION_ID" {
+output "subscriptionId" {
   value = data.azurerm_subscription.primary.subscription_id
 }
 
-output "ARM_TENANT_ID" {
+output "tenantId" {
   value = data.azurerm_subscription.primary.tenant_id
 }
