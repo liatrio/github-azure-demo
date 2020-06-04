@@ -29,6 +29,7 @@ jobs:
           terragrunt_version: 0.23.2
       - name: Terragrunt apply
         run: yes | terragrunt apply-all
+        working-directory: ./terraform
         env:
           ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
           ENVIRONMENT: preview
@@ -39,11 +40,11 @@ jobs:
           TF_VAR_ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       - name: terragrunt output
         run: | 
-          cd terraform/application
           terragrunt output -json > terraform.output
           echo "##[set-output name=hostname;]$(cat terraform.output | jq -r '.azure_app_hostname.value')"
           echo "##[set-output name=app_name;]$(cat terraform.output | jq -r '.azure_app_name.value')"
         id: output
+        working-directory: ./terraform/application
         env:
           ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
           ENVIRONMENT: preview

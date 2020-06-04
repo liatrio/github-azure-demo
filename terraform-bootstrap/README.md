@@ -42,3 +42,17 @@ terraform import azurerm_resource_group.github_workshop_prod `az group show --na
 terraform import azurerm_storage_account.storage_account `az storage account show --name githubworkshop | jq -r .id`
 terraform import azurerm_storage_container.storage_container https://githubworkshop.blob.core.windows.net/tfstate
 ```
+
+## Azure Service Principal for Terraform
+
+In order for the Github Actions to run Terraform on Azure, they will need 5 Github secrets configured for the repostiory which you can retrieve by running the following command.
+
+```
+terraform output -json | jq 'with_entries(.value |= .value)'
+```
+
+https://github.com/liatrio/github-azure-demo/settings/secrets
+
+For `ARM_CLIENT_ID, ARM_CLIENT_SECRET, ARM_SUBSCRIPTION_ID, ARM_TENANT_ID`, update each value into its own secret.
+
+For `AZURE_CREDENTIALS`, copy the entire JSON into the secret value.
