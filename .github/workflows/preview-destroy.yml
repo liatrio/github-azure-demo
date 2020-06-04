@@ -16,6 +16,7 @@ jobs:
           terragrunt_version: 0.23.2
       - name: Terragrunt Destroy
         run: yes | terragrunt destroy-all
+        working-directory: ./terraform
         env:
           ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
           ENVIRONMENT: preview

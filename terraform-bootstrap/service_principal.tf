@@ -56,6 +56,7 @@ resource "azurerm_role_definition" "github_action_terraform_role" {
         "Microsoft.Web/sites/config/list/action",
         "Microsoft.Web/sites/sourcecontrols/read",
         "Microsoft.Web/sites/sourcecontrols/write",
+        "Microsoft.Web/sites/publishxml/action",
     ]
   }
 
