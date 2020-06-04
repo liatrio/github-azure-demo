@@ -34,7 +34,7 @@ jobs:
       - name: Terragrunt plan
         run: |
           terragrunt plan-all > logs.txt
-          echo "##[set-output name=modified_terraform;]$(cat logs.txt | grep -"No changes. Infrastructure is up-to-date." || true)"
+          echo "##[set-output name=modified_terraform;]$(cat logs.txt | grep "No changes. Infrastructure is up-to-date." || true)"
         id: plan
         env:
           ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
