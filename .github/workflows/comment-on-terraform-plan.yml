@@ -33,6 +33,7 @@ jobs:
 
       - name: Terragrunt plan
         run: |
+          terragrunt plan-all
           terragrunt plan-all > logs.txt
           cat logs.txt | grep "No changes. Infrastructure is up-to-date."
           echo "##[set-output name=modified_terraform;]$?"
