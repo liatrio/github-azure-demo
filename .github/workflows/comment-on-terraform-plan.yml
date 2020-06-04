@@ -2,7 +2,7 @@ name: comment-on-terraform-plan
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, synchronize]
 
 env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'
