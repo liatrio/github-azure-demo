@@ -41,6 +41,7 @@ jobs:
           ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
           ENVIRONMENT: prod
           BRANCH: ${{ github.head_ref }}
+          TF_LOG: TRACE
           TF_VAR_ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
           TF_VAR_ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
           TF_VAR_ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
