@@ -27,6 +27,23 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Setup Terragrunt
+        uses: autero1/action-terragrunt@v0.1.0
+        with:
+          terragrunt_version: 0.23.2
+
+      - name: Terragrunt apply
+        run: yes | terragrunt apply-all
+        working-directory: ./terraform
+        env:
+          ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
+          ENVIRONMENT: prod
+          BRANCH: master
+          TF_VAR_ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          TF_VAR_ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          TF_VAR_ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          TF_VAR_ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+
       - name: GitHub Deployment
         uses: chrnorm/deployment-action@releases/v1
         id: deployment
