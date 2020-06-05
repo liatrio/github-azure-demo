@@ -10,7 +10,7 @@ env:
   NODE_VERSION: '12.16.3'
 
 jobs:
-  build:
+  create_update:
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
@@ -108,3 +108,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           msg: "Your preview environment has been updated! Use the same link to view your changes."
+    outputs:
+      deployment_id: ${{ steps.deployment.outputs.deployment_id }}
