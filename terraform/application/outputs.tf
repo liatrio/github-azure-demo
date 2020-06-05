@@ -9,3 +9,11 @@ output "sql_server_name" {
 output "backend_app_service_ip_addresses" {
   value = split(",", azurerm_app_service.app_service.possible_outbound_ip_addresses)
 }
+
+output "azure_app_hostname" {
+  value = azurerm_app_service.app_service.default_site_hostname
+}
+
+output "azure_app_name" {
+  value = azurerm_app_service.app_service.name
+}
