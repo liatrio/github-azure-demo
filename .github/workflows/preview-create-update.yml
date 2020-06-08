@@ -1,8 +1,8 @@
-name: preview-update
+name: preview-create-update
 
 on:
   pull_request:
-    types: [synchronize]
+    types: [opened, synchronize]
 
 env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'
@@ -10,7 +10,7 @@ env:
   NODE_VERSION: '12.16.3'
 
 jobs:
-  build:
+  create-update:
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
@@ -39,7 +39,7 @@ jobs:
           TF_VAR_ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           TF_VAR_ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       - name: terragrunt output
-        run: | 
+        run: |
           terragrunt output -json > terraform.output
           echo "##[set-output name=hostname;]$(cat terraform.output | jq -r '.azure_app_hostname.value')"
           echo "##[set-output name=app_name;]$(cat terraform.output | jq -r '.azure_app_name.value')"
@@ -94,7 +94,15 @@ jobs:
           environment_url: "https://${{ steps.output.outputs.hostname }}"
           state: "failure"
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-      - name: PR Comment
+      - name: PR Comment (Create)
+        if: ${{ github.event.action == 'opened' }}
+        uses: unsplash/comment-on-pr@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          msg: "Your preview environment has been created! You can find the link for your environment below."
+      - name: PR Comment (Update)
+        if: ${{ github.event.action == 'synchronize' }}
         uses: unsplash/comment-on-pr@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
