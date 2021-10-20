@@ -3,7 +3,8 @@ output "clientId" {
 }
 
 output "clientSecret" {
-  value = random_password.azuread_sp_password.result
+  value     = azuread_service_principal_password.github_action_service_principal_password.value
+  sensitive = true
 }
 
 output "subscriptionId" {
