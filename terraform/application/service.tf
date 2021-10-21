@@ -1,5 +1,5 @@
 resource "azurerm_app_service_plan" "service_plan" {
-  name                = "github-workshop-${var.environment}-${var.branch}"
+  name                = "github-workshop-${var.environment}-${local.branch}"
   location            = data.azurerm_resource_group.github_workshop.location
   resource_group_name = data.azurerm_resource_group.github_workshop.name
   kind                = "Linux"
@@ -14,7 +14,7 @@ resource "azurerm_app_service_plan" "service_plan" {
 }
 
 resource "azurerm_app_service" "app_service" {
-  name                = "realworld-demo-${var.environment}-${var.branch}"
+  name                = "realworld-demo-${var.environment}-${local.branch}"
   location            = data.azurerm_resource_group.github_workshop.location
   resource_group_name = data.azurerm_resource_group.github_workshop.name
   app_service_plan_id = azurerm_app_service_plan.service_plan.id

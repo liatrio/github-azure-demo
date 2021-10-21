@@ -1,5 +1,5 @@
 provider "azurerm" {
-  version = "2.10.0"
+  version         = "2.10.0"
   subscription_id = var.ARM_SUBSCRIPTION_ID
   client_id       = var.ARM_CLIENT_ID
   client_secret   = var.ARM_CLIENT_SECRET
@@ -18,4 +18,5 @@ locals {
     managed_by  = "terraform"
     source      = "https://github.com/liatrio/aspnetcore-realworld-example-app/tree/master/terraform"
   }
+  branch = replace(var.branch, ".", "")
 }

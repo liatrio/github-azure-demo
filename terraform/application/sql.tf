@@ -3,7 +3,7 @@ resource "random_password" "sql_admin_pasword" {
 }
 
 resource "azurerm_sql_server" "sql_server" {
-  name                = "realworld-demo-${var.environment}-${var.branch}"
+  name                = "realworld-demo-${var.environment}-${local.branch}"
   resource_group_name = data.azurerm_resource_group.github_workshop.name
   location            = data.azurerm_resource_group.github_workshop.location
   version             = "12.0"
