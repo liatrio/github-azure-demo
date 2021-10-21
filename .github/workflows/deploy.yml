@@ -30,10 +30,10 @@ jobs:
       - name: Setup Terragrunt
         uses: autero1/action-terragrunt@v1.1.1
         with:
-          terragrunt_version: 0.23.2
+          terragrunt_version: v0.31.4 
 
       - name: Terragrunt apply
-        run: yes | terragrunt apply-all
+        run: yes | terragrunt run-all apply
         working-directory: ./terraform
         env:
           ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
