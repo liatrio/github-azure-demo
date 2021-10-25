@@ -13,7 +13,7 @@ env:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v1
 
@@ -21,13 +21,15 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ env.NODE_VERSION }}
+      - name: install yarn
+        run: npm install -g yarn
 
       - run: |
           yarn
           yarn coverage
           bash <(curl -s https://codecov.io/bash)
   lint:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2 # create-pull-request requires v2
         with:
@@ -37,6 +39,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ env.NODE_VERSION }}
+
+      - name: install yarn
+        run: npm install -g yarn
 
       - run: |
           yarn
@@ -58,7 +63,7 @@ jobs:
 
       - name: Create PR With Lint Fixes
         if: failure()
-        uses: peter-evans/create-pull-request@v2
+        uses: peter-evans/create-pull-request@v3.10.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "Automated prettier lint fix for #${{ steps.pr-vars.outputs.result }}"
