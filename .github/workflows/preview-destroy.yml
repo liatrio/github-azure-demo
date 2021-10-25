@@ -10,6 +10,10 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.9
       - name: Setup Terragrunt
         uses: autero1/action-terragrunt@v1.1.1
         with:
