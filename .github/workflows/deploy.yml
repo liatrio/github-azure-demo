@@ -12,7 +12,7 @@ env:
 
 jobs:
   build-and-deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
 
       - uses: actions/checkout@v1
@@ -31,6 +31,7 @@ jobs:
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 1.0.9
+          terraform_wrapper: false
 
       - name: Setup Terragrunt
         uses: autero1/action-terragrunt@v1.1.1
