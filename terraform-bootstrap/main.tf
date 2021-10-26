@@ -1,3 +1,12 @@
+terraform {
+  backend "azurerm" {
+    resource_group_name  = "github-workshop"
+    storage_account_name = "githubworkshop"
+    container_name       = "tfstate"
+    key                  = "bootstrap-terraform.tfstate"
+  }
+}
+
 provider "azurerm" {
   version = "2.10.0"
   features {}
