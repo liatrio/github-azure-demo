@@ -3,6 +3,11 @@ resource "azurerm_resource_group" "github_workshop" {
   location = var.location
 }
 
+resource "azurerm_resource_group" "github_workshop_ado_prod" {
+  name     = "github-workshop-ado-prod"
+  location = var.location
+}
+
 resource "azurerm_resource_group" "github_workshop_prod" {
   name     = "github-workshop-prod"
   location = var.location
