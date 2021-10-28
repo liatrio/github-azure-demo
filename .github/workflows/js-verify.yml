@@ -17,12 +17,12 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-      - name: install yarn
-        run: npm install -g yarn
+#      - name: Setup Node
+#        uses: actions/setup-node@v1
+#        with:
+#          node-version: ${{ env.NODE_VERSION }}
+#      - name: install yarn
+#        run: npm install -g yarn
 
       - run: |
           yarn
